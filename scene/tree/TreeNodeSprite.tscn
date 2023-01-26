@@ -1,0 +1,57 @@
+[gd_scene load_steps=6 format=2]
+
+[ext_resource path="res://scene/tree/TreeNodeSprite.cs" type="Script" id=1]
+[ext_resource path="res://scene/tree/TreeNodeLine.tscn" type="PackedScene" id=2]
+[ext_resource path="res://font/NodeClassFont.tres" type="DynamicFont" id=3]
+[ext_resource path="res://shader/TreeNodeCircle.tres" type="Material" id=4]
+[ext_resource path="res://scene/ui/ViewportLabel.tscn" type="PackedScene" id=5]
+
+[node name="TreeNodeSprite" type="Node2D"]
+script = ExtResource( 1 )
+
+[node name="TreeNodeColorRect" type="ColorRect" parent="."]
+material = ExtResource( 4 )
+margin_left = -32.0
+margin_top = -32.0
+margin_right = 32.0
+margin_bottom = 32.0
+
+[node name="LeftChildLine" parent="." instance=ExtResource( 2 )]
+z_index = -1
+
+[node name="RightChildLine" parent="." instance=ExtResource( 2 )]
+z_index = -1
+
+[node name="LeftClassLabelNode" type="Node2D" parent="."]
+visible = false
+z_index = 99
+z_as_relative = false
+
+[node name="ClassLabel" type="Label" parent="LeftClassLabelNode"]
+margin_left = -300.0
+margin_right = 300.0
+margin_bottom = 41.0
+custom_fonts/font = ExtResource( 3 )
+align = 1
+valign = 1
+clip_text = true
+
+[node name="RightClassLabelNode" type="Node2D" parent="."]
+visible = false
+z_index = 99
+z_as_relative = false
+
+[node name="ClassLabel" type="Label" parent="RightClassLabelNode"]
+margin_left = -300.0
+margin_right = 300.0
+margin_bottom = 41.0
+custom_fonts/font = ExtResource( 3 )
+align = 1
+valign = 1
+clip_text = true
+
+[node name="FeatureLabelNode" type="Node2D" parent="."]
+z_index = 99
+z_as_relative = false
+
+[node name="FeatureLabel" parent="FeatureLabelNode" instance=ExtResource( 5 )]

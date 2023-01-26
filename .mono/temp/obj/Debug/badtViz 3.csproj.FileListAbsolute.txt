@@ -1,0 +1,29 @@
+D:\SkyDrive\Documents\Bended_Attributes_GD_3\.mono\temp\bin\Debug\badtViz 3.dll
+D:\SkyDrive\Documents\Bended_Attributes_GD_3\.mono\temp\bin\Debug\badtViz 3.pdb
+D:\SkyDrive\Documents\Bended_Attributes_GD_3\.mono\temp\obj\Debug\badtViz 3.csproj.AssemblyReference.cache
+D:\SkyDrive\Documents\Bended_Attributes_GD_3\.mono\temp\obj\Debug\badtViz 3.GeneratedMSBuildEditorConfig.editorconfig
+D:\SkyDrive\Documents\Bended_Attributes_GD_3\.mono\temp\obj\Debug\badtViz 3.AssemblyInfoInputs.cache
+D:\SkyDrive\Documents\Bended_Attributes_GD_3\.mono\temp\obj\Debug\badtViz 3.AssemblyInfo.cs
+D:\SkyDrive\Documents\Bended_Attributes_GD_3\.mono\temp\obj\Debug\badtViz 3.csproj.CoreCompileInputs.cache
+D:\SkyDrive\Documents\Bended_Attributes_GD_3\.mono\temp\obj\Debug\badtViz 3.dll
+D:\SkyDrive\Documents\Bended_Attributes_GD_3\.mono\temp\obj\Debug\badtViz 3.pdb
+D:\SkyDrive\Documents\Bended_Attributes_GD_3\.mono\temp\bin\Debug\Microsoft.ML.Core.dll
+D:\SkyDrive\Documents\Bended_Attributes_GD_3\.mono\temp\bin\Debug\Microsoft.ML.Data.dll
+D:\SkyDrive\Documents\Bended_Attributes_GD_3\.mono\temp\bin\Debug\Microsoft.ML.KMeansClustering.dll
+D:\SkyDrive\Documents\Bended_Attributes_GD_3\.mono\temp\bin\Debug\Microsoft.ML.PCA.dll
+D:\SkyDrive\Documents\Bended_Attributes_GD_3\.mono\temp\bin\Debug\Microsoft.ML.StandardTrainers.dll
+D:\SkyDrive\Documents\Bended_Attributes_GD_3\.mono\temp\bin\Debug\Microsoft.ML.Transforms.dll
+D:\SkyDrive\Documents\Bended_Attributes_GD_3\.mono\temp\bin\Debug\Microsoft.ML.dll
+D:\SkyDrive\Documents\Bended_Attributes_GD_3\.mono\temp\bin\Debug\Microsoft.ML.CpuMath.dll
+D:\SkyDrive\Documents\Bended_Attributes_GD_3\.mono\temp\bin\Debug\Microsoft.ML.DataView.dll
+D:\SkyDrive\Documents\Bended_Attributes_GD_3\.mono\temp\bin\Debug\Microsoft.ML.FastTree.dll
+D:\SkyDrive\Documents\Bended_Attributes_GD_3\.mono\temp\bin\Debug\Newtonsoft.Json.dll
+D:\SkyDrive\Documents\Bended_Attributes_GD_3\.mono\temp\bin\Debug\System.Buffers.dll
+D:\SkyDrive\Documents\Bended_Attributes_GD_3\.mono\temp\bin\Debug\System.CodeDom.dll
+D:\SkyDrive\Documents\Bended_Attributes_GD_3\.mono\temp\bin\Debug\System.Collections.Immutable.dll
+D:\SkyDrive\Documents\Bended_Attributes_GD_3\.mono\temp\bin\Debug\System.Memory.dll
+D:\SkyDrive\Documents\Bended_Attributes_GD_3\.mono\temp\bin\Debug\System.Numerics.Vectors.dll
+D:\SkyDrive\Documents\Bended_Attributes_GD_3\.mono\temp\bin\Debug\System.Runtime.CompilerServices.Unsafe.dll
+D:\SkyDrive\Documents\Bended_Attributes_GD_3\.mono\temp\bin\Debug\System.Threading.Channels.dll
+D:\SkyDrive\Documents\Bended_Attributes_GD_3\.mono\temp\bin\Debug\System.Threading.Tasks.Extensions.dll
+D:\SkyDrive\Documents\Bended_Attributes_GD_3\.mono\temp\obj\Debug\badtViz 3.csproj.CopyComplete

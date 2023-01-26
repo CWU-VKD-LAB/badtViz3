@@ -1,0 +1,12 @@
+{
+  "editor.formatOnPaste": true,
+  "editor.formatOnSave": true,
+  "editor.tabSize": 4,
+  "editor.detectIndentation": false,
+  "editor.insertSpaces": true,
+  "[csharp]": {
+    "editor.formatOnSave": true,
+    "editor.tabSize": 4,
+    "editor.insertSpaces": true
+  }
+}

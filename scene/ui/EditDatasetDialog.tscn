@@ -1,0 +1,146 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://scene/ui/EditDatasetDialog.cs" type="Script" id=1]
+
+[node name="EditDatasetDialog" type="WindowDialog"]
+visible = true
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_right = -580.0
+margin_bottom = -420.0
+rect_min_size = Vector2( 700, 300 )
+popup_exclusive = true
+window_title = "Edit Dataset"
+resizable = true
+script = ExtResource( 1 )
+
+[node name="MainVbox" type="VBoxContainer" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 20.0
+margin_top = 20.0
+margin_right = -20.0
+margin_bottom = -20.0
+
+[node name="TopButtonsHbox" type="HBoxContainer" parent="MainVbox"]
+margin_right = 660.0
+margin_bottom = 24.0
+
+[node name="DatasetNameLabel" type="Label" parent="MainVbox/TopButtonsHbox"]
+margin_top = 5.0
+margin_right = 99.0
+margin_bottom = 19.0
+text = "Dataset Name: "
+
+[node name="DatasetNameField" type="LineEdit" parent="MainVbox/TopButtonsHbox"]
+margin_left = 103.0
+margin_right = 263.0
+margin_bottom = 24.0
+rect_min_size = Vector2( 160, 0 )
+caret_blink = true
+caret_blink_speed = 0.5
+
+[node name="CenterPaddingControl" type="Control" parent="MainVbox/TopButtonsHbox"]
+margin_left = 267.0
+margin_right = 281.0
+margin_bottom = 24.0
+size_flags_horizontal = 3
+
+[node name="MaxRowsLabel" type="Label" parent="MainVbox/TopButtonsHbox"]
+margin_left = 285.0
+margin_top = 5.0
+margin_right = 401.0
+margin_bottom = 19.0
+text = "Max Shown Rows: "
+
+[node name="MaxShownRowsSpinbox" type="SpinBox" parent="MainVbox/TopButtonsHbox"]
+margin_left = 405.0
+margin_right = 479.0
+margin_bottom = 24.0
+min_value = 10.0
+max_value = 1000.0
+step = 10.0
+value = 100.0
+
+[node name="ColWidthLabel" type="Label" parent="MainVbox/TopButtonsHbox"]
+margin_left = 483.0
+margin_top = 5.0
+margin_right = 582.0
+margin_bottom = 19.0
+text = "Column Width: "
+
+[node name="ColWidthSpinbox" type="SpinBox" parent="MainVbox/TopButtonsHbox"]
+margin_left = 586.0
+margin_right = 660.0
+margin_bottom = 24.0
+min_value = 80.0
+max_value = 600.0
+step = 10.0
+value = 120.0
+
+[node name="HSeparator" type="HSeparator" parent="MainVbox"]
+margin_top = 28.0
+margin_right = 660.0
+margin_bottom = 38.0
+rect_min_size = Vector2( 0, 10 )
+
+[node name="ScrollContainer" type="ScrollContainer" parent="MainVbox"]
+margin_top = 42.0
+margin_right = 660.0
+margin_bottom = 212.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="TableVbox" type="VBoxContainer" parent="MainVbox/ScrollContainer"]
+margin_right = 660.0
+margin_bottom = 170.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="HeadersTable" type="GridContainer" parent="MainVbox/ScrollContainer/TableVbox"]
+margin_right = 660.0
+size_flags_horizontal = 3
+size_flags_vertical = 5
+
+[node name="HSeparator2" type="HSeparator" parent="MainVbox/ScrollContainer/TableVbox"]
+margin_top = 4.0
+margin_right = 660.0
+margin_bottom = 14.0
+rect_min_size = Vector2( 0, 10 )
+
+[node name="SamplesTable" type="GridContainer" parent="MainVbox/ScrollContainer/TableVbox"]
+margin_top = 18.0
+margin_right = 660.0
+margin_bottom = 170.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="HSeparator3" type="HSeparator" parent="MainVbox"]
+margin_top = 216.0
+margin_right = 660.0
+margin_bottom = 226.0
+rect_min_size = Vector2( 0, 10 )
+
+[node name="BottomButtonsHbox" type="HBoxContainer" parent="MainVbox"]
+margin_top = 230.0
+margin_right = 660.0
+margin_bottom = 260.0
+
+[node name="SampleCountLabel" type="Label" parent="MainVbox/BottomButtonsHbox"]
+margin_top = 8.0
+margin_right = 143.0
+margin_bottom = 22.0
+text = "Total number of rows: "
+
+[node name="CenterPaddingControl" type="Control" parent="MainVbox/BottomButtonsHbox"]
+margin_left = 147.0
+margin_right = 576.0
+margin_bottom = 30.0
+size_flags_horizontal = 3
+
+[node name="DoneBtn" type="Button" parent="MainVbox/BottomButtonsHbox"]
+margin_left = 580.0
+margin_right = 660.0
+margin_bottom = 30.0
+rect_min_size = Vector2( 80, 30 )
+text = "Done"

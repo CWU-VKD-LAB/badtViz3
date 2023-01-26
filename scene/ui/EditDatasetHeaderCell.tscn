@@ -1,0 +1,17 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://scene/ui/EditDatasetHeaderCell.cs" type="Script" id=1]
+
+[node name="EditDatasetSampleCell" type="MarginContainer"]
+margin_right = 120.0
+margin_bottom = 40.0
+rect_min_size = Vector2( 120, 0 )
+script = ExtResource( 1 )
+
+[node name="HeaderCellMenuBtn" type="MenuButton" parent="."]
+margin_right = 120.0
+margin_bottom = 40.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+clip_text = true
+items = [ "Rename", null, 0, false, false, 0, 0, null, "", false, "Change Data Type", null, 0, false, false, 1, 0, null, "", false ]

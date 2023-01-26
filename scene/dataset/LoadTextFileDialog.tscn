@@ -1,0 +1,255 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://scene/dataset/LoadTextFileDialog.cs" type="Script" id=1]
+
+[node name="LoadTextFileDialog" type="WindowDialog"]
+margin_right = 450.0
+margin_bottom = 198.0
+rect_min_size = Vector2( 450, 400 )
+window_title = "Import Dataset from Text File"
+resizable = true
+script = ExtResource( 1 )
+
+[node name="MainVbox" type="VBoxContainer" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 8.0
+margin_top = 8.0
+margin_right = -8.0
+margin_bottom = -8.0
+
+[node name="FilePathHbox" type="HBoxContainer" parent="MainVbox"]
+margin_right = 434.0
+margin_bottom = 25.0
+size_flags_horizontal = 3
+
+[node name="FilePathEdit" type="LineEdit" parent="MainVbox/FilePathHbox"]
+margin_right = 340.0
+margin_bottom = 25.0
+size_flags_horizontal = 3
+placeholder_text = "[File path]"
+caret_blink = true
+
+[node name="FileBrowseBtn" type="Button" parent="MainVbox/FilePathHbox"]
+margin_left = 344.0
+margin_right = 434.0
+margin_bottom = 25.0
+rect_min_size = Vector2( 90, 25 )
+text = "Browse ..."
+
+[node name="HSeparator" type="HSeparator" parent="MainVbox"]
+margin_top = 29.0
+margin_right = 434.0
+margin_bottom = 37.0
+rect_min_size = Vector2( 0, 8 )
+
+[node name="NameHbox" type="HBoxContainer" parent="MainVbox"]
+margin_top = 41.0
+margin_right = 434.0
+margin_bottom = 65.0
+
+[node name="Label" type="Label" parent="MainVbox/NameHbox"]
+margin_top = 5.0
+margin_right = 180.0
+margin_bottom = 19.0
+rect_min_size = Vector2( 180, 0 )
+text = "Dataset Name:"
+
+[node name="NameEdit" type="LineEdit" parent="MainVbox/NameHbox"]
+margin_left = 184.0
+margin_right = 434.0
+margin_bottom = 24.0
+size_flags_horizontal = 3
+align = 1
+placeholder_text = "New Dataset"
+caret_blink = true
+
+[node name="IndexColHbox" type="HBoxContainer" parent="MainVbox"]
+margin_top = 69.0
+margin_right = 434.0
+margin_bottom = 93.0
+
+[node name="HasIndexCheckbox" type="CheckBox" parent="MainVbox/IndexColHbox"]
+margin_right = 254.0
+margin_bottom = 24.0
+size_flags_horizontal = 3
+text = "Has Index Column?"
+
+[node name="Label" type="Label" parent="MainVbox/IndexColHbox"]
+margin_left = 258.0
+margin_top = 5.0
+margin_right = 355.0
+margin_bottom = 19.0
+text = "Index Column: "
+
+[node name="IndexColSpinbox" type="SpinBox" parent="MainVbox/IndexColHbox"]
+margin_left = 359.0
+margin_right = 434.0
+margin_bottom = 24.0
+rect_min_size = Vector2( 75, 0 )
+editable = false
+
+[node name="HSeparator2" type="HSeparator" parent="MainVbox"]
+margin_top = 97.0
+margin_right = 434.0
+margin_bottom = 105.0
+rect_min_size = Vector2( 0, 8 )
+
+[node name="HasHeaderHbox" type="HBoxContainer" parent="MainVbox"]
+margin_top = 109.0
+margin_right = 434.0
+margin_bottom = 133.0
+
+[node name="Label" type="Label" parent="MainVbox/HasHeaderHbox"]
+margin_top = 5.0
+margin_right = 406.0
+margin_bottom = 19.0
+rect_min_size = Vector2( 180, 0 )
+size_flags_horizontal = 3
+text = "First line in file is a Header?"
+align = 2
+
+[node name="HasHeaderCheckbox" type="CheckBox" parent="MainVbox/HasHeaderHbox"]
+margin_left = 410.0
+margin_right = 434.0
+margin_bottom = 24.0
+pressed = true
+
+[node name="DelimiterSelectHbox" type="HBoxContainer" parent="MainVbox"]
+margin_top = 137.0
+margin_right = 434.0
+margin_bottom = 236.0
+
+[node name="Label" type="Label" parent="MainVbox/DelimiterSelectHbox"]
+margin_top = 42.0
+margin_right = 180.0
+margin_bottom = 56.0
+rect_min_size = Vector2( 180, 0 )
+text = "Column Delimiter:"
+
+[node name="ColumnDelimiterList" type="ItemList" parent="MainVbox/DelimiterSelectHbox"]
+margin_left = 184.0
+margin_right = 434.0
+margin_bottom = 99.0
+size_flags_horizontal = 3
+items = [ "Auto-detect", null, false, "Comma", null, false, "Semi-colon", null, false, "Tab", null, false, "(Custom)", null, false ]
+auto_height = true
+same_column_width = true
+
+[node name="DelimiterCustomHbox" type="HBoxContainer" parent="MainVbox"]
+visible = false
+margin_top = 222.0
+margin_right = 434.0
+margin_bottom = 246.0
+
+[node name="Label" type="Label" parent="MainVbox/DelimiterCustomHbox"]
+margin_top = 5.0
+margin_right = 180.0
+margin_bottom = 19.0
+rect_min_size = Vector2( 180, 0 )
+text = "Column Delimiter:"
+
+[node name="CustomDelimeterEdit" type="LineEdit" parent="MainVbox/DelimiterCustomHbox"]
+margin_left = 184.0
+margin_right = 434.0
+margin_bottom = 24.0
+size_flags_horizontal = 3
+text = ","
+align = 1
+max_length = 1
+
+[node name="HSeparator3" type="HSeparator" parent="MainVbox"]
+margin_top = 240.0
+margin_right = 434.0
+margin_bottom = 248.0
+rect_min_size = Vector2( 0, 8 )
+
+[node name="NullFeatureHbox" type="HBoxContainer" parent="MainVbox"]
+margin_top = 252.0
+margin_right = 434.0
+margin_bottom = 297.0
+
+[node name="Label" type="Label" parent="MainVbox/NullFeatureHbox"]
+margin_top = 15.0
+margin_right = 180.0
+margin_bottom = 29.0
+rect_min_size = Vector2( 180, 0 )
+text = "Null Features:"
+
+[node name="NullFeatureHandlingList" type="ItemList" parent="MainVbox/NullFeatureHbox"]
+margin_left = 184.0
+margin_right = 434.0
+margin_bottom = 45.0
+size_flags_horizontal = 3
+items = [ "Ignore", null, false, "Insert Zeros", null, false ]
+auto_height = true
+same_column_width = true
+
+[node name="IgnoreDuplicatesHbox" type="HBoxContainer" parent="MainVbox"]
+margin_top = 301.0
+margin_right = 434.0
+margin_bottom = 325.0
+
+[node name="Label" type="Label" parent="MainVbox/IgnoreDuplicatesHbox"]
+margin_top = 5.0
+margin_right = 406.0
+margin_bottom = 19.0
+rect_min_size = Vector2( 180, 0 )
+size_flags_horizontal = 3
+text = "Ignore Duplicate Samples?"
+align = 2
+
+[node name="IgnoreDuplicatesCheckbox" type="CheckBox" parent="MainVbox/IgnoreDuplicatesHbox"]
+margin_left = 410.0
+margin_right = 434.0
+margin_bottom = 24.0
+pressed = true
+
+[node name="HSeparator4" type="HSeparator" parent="MainVbox"]
+margin_top = 329.0
+margin_right = 434.0
+margin_bottom = 355.0
+rect_min_size = Vector2( 0, 8 )
+size_flags_vertical = 3
+
+[node name="BtnsHbox" type="HBoxContainer" parent="MainVbox"]
+margin_top = 359.0
+margin_right = 434.0
+margin_bottom = 384.0
+
+[node name="CancelBtn" type="Button" parent="MainVbox/BtnsHbox"]
+margin_right = 75.0
+margin_bottom = 25.0
+rect_min_size = Vector2( 75, 25 )
+text = "Cancel"
+
+[node name="CenterPadding" type="Control" parent="MainVbox/BtnsHbox"]
+margin_left = 79.0
+margin_right = 276.0
+margin_bottom = 25.0
+size_flags_horizontal = 3
+
+[node name="PreviousBtn" type="Button" parent="MainVbox/BtnsHbox"]
+margin_left = 280.0
+margin_right = 355.0
+margin_bottom = 25.0
+rect_min_size = Vector2( 75, 25 )
+text = "Previous"
+
+[node name="NextBtn" type="Button" parent="MainVbox/BtnsHbox"]
+margin_left = 359.0
+margin_right = 434.0
+margin_bottom = 25.0
+rect_min_size = Vector2( 75, 25 )
+text = "Next"
+
+[node name="DatasetFileDialog" type="FileDialog" parent="."]
+margin_right = 315.0
+margin_bottom = 130.0
+rect_min_size = Vector2( 500, 300 )
+popup_exclusive = true
+window_title = "Open a File"
+resizable = true
+mode = 0
+access = 2
+filters = PoolStringArray( "*.csv ; Comma Separated File", "*.txt, *.tsv ; Tab Separated File", "*.* Other Text File" )

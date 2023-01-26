@@ -1,0 +1,178 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://scene/tree/EditBinaryTreeNodeDialog.cs" type="Script" id=1]
+
+[node name="EditBinaryTreeNodeDialog" type="WindowDialog"]
+margin_right = 420.0
+margin_bottom = 280.0
+rect_min_size = Vector2( 420, 0 )
+popup_exclusive = true
+window_title = "New Binary Tree Node"
+script = ExtResource( 1 )
+
+[node name="MainVbox" type="VBoxContainer" parent="."]
+margin_left = 8.0
+margin_top = 8.0
+margin_right = -8.0
+margin_bottom = -8.0
+rect_min_size = Vector2( 400, 0 )
+size_flags_horizontal = 9
+size_flags_vertical = 9
+
+[node name="NameHbox" type="HBoxContainer" parent="MainVbox"]
+margin_right = 400.0
+margin_bottom = 24.0
+size_flags_horizontal = 3
+
+[node name="Label" type="Label" parent="MainVbox/NameHbox"]
+margin_top = 5.0
+margin_right = 50.0
+margin_bottom = 19.0
+rect_min_size = Vector2( 50, 0 )
+text = "Name: "
+
+[node name="NameLineEdit" type="LineEdit" parent="MainVbox/NameHbox"]
+margin_left = 54.0
+margin_right = 400.0
+margin_bottom = 24.0
+size_flags_horizontal = 3
+placeholder_text = "New Node"
+
+[node name="NodeTypeHbox" type="HBoxContainer" parent="MainVbox"]
+margin_top = 28.0
+margin_right = 400.0
+margin_bottom = 48.0
+
+[node name="Label" type="Label" parent="MainVbox/NodeTypeHbox"]
+margin_top = 3.0
+margin_right = 50.0
+margin_bottom = 17.0
+rect_min_size = Vector2( 50, 0 )
+text = "Type: "
+
+[node name="NodeTypeMenu" type="MenuButton" parent="MainVbox/NodeTypeHbox"]
+margin_left = 54.0
+margin_right = 400.0
+margin_bottom = 20.0
+size_flags_horizontal = 3
+text = "Decision Node"
+flat = false
+items = [ "Decision Node", null, 0, false, false, 0, 0, null, "", false, "Leaf Class Node", null, 0, false, false, 1, 0, null, "", false ]
+switch_on_hover = true
+
+[node name="HSeparator" type="HSeparator" parent="MainVbox"]
+margin_top = 52.0
+margin_right = 400.0
+margin_bottom = 62.0
+rect_min_size = Vector2( 0, 10 )
+
+[node name="DecisionNodeVbox" type="VBoxContainer" parent="MainVbox"]
+margin_top = 66.0
+margin_right = 400.0
+margin_bottom = 221.0
+rect_min_size = Vector2( 0, 155 )
+
+[node name="FeatureHbox" type="HBoxContainer" parent="MainVbox/DecisionNodeVbox"]
+margin_right = 400.0
+margin_bottom = 25.0
+
+[node name="Label" type="Label" parent="MainVbox/DecisionNodeVbox/FeatureHbox"]
+margin_top = 5.0
+margin_right = 75.0
+margin_bottom = 19.0
+rect_min_size = Vector2( 75, 0 )
+text = "Feature: "
+
+[node name="FeatureMenuBtn" type="MenuButton" parent="MainVbox/DecisionNodeVbox/FeatureHbox"]
+margin_left = 79.0
+margin_right = 400.0
+margin_bottom = 25.0
+rect_min_size = Vector2( 0, 25 )
+size_flags_horizontal = 3
+text = "FEATURE_NAME"
+flat = false
+
+[node name="OperatorHbox" type="HBoxContainer" parent="MainVbox/DecisionNodeVbox"]
+margin_top = 29.0
+margin_right = 400.0
+margin_bottom = 110.0
+
+[node name="Label" type="Label" parent="MainVbox/DecisionNodeVbox/OperatorHbox"]
+margin_top = 33.0
+margin_right = 75.0
+margin_bottom = 47.0
+rect_min_size = Vector2( 75, 0 )
+text = "Operator: "
+
+[node name="OperatorItemList" type="ItemList" parent="MainVbox/DecisionNodeVbox/OperatorHbox"]
+margin_left = 79.0
+margin_right = 400.0
+margin_bottom = 81.0
+size_flags_horizontal = 3
+items = [ "<", null, false, "<=", null, false, ">", null, false, ">=", null, false ]
+auto_height = true
+
+[node name="ThresholdHbox" type="HBoxContainer" parent="MainVbox/DecisionNodeVbox"]
+margin_top = 114.0
+margin_right = 400.0
+margin_bottom = 138.0
+
+[node name="Label" type="Label" parent="MainVbox/DecisionNodeVbox/ThresholdHbox"]
+margin_top = 5.0
+margin_right = 75.0
+margin_bottom = 19.0
+rect_min_size = Vector2( 75, 0 )
+text = "Threshold: "
+
+[node name="ThresholdEdit" type="LineEdit" parent="MainVbox/DecisionNodeVbox/ThresholdHbox"]
+margin_left = 79.0
+margin_right = 400.0
+margin_bottom = 24.0
+size_flags_horizontal = 3
+text = "0.0"
+
+[node name="LeafClassHbox" type="HBoxContainer" parent="MainVbox"]
+visible = false
+margin_top = 225.0
+margin_right = 400.0
+margin_bottom = 250.0
+
+[node name="Label" type="Label" parent="MainVbox/LeafClassHbox"]
+margin_top = 5.0
+margin_right = 138.0
+margin_bottom = 19.0
+text = "Class Determination: "
+
+[node name="LeafClassMenuBtn" type="MenuButton" parent="MainVbox/LeafClassHbox"]
+margin_left = 142.0
+margin_right = 400.0
+margin_bottom = 25.0
+rect_min_size = Vector2( 0, 25 )
+size_flags_horizontal = 3
+flat = false
+
+[node name="HSeparator2" type="HSeparator" parent="MainVbox"]
+margin_top = 225.0
+margin_right = 400.0
+margin_bottom = 235.0
+rect_min_size = Vector2( 0, 10 )
+
+[node name="BtnHbox" type="HBoxContainer" parent="MainVbox"]
+margin_top = 239.0
+margin_right = 400.0
+margin_bottom = 264.0
+alignment = 2
+
+[node name="OkayBtn" type="Button" parent="MainVbox/BtnHbox"]
+margin_left = 246.0
+margin_right = 321.0
+margin_bottom = 25.0
+rect_min_size = Vector2( 75, 25 )
+text = "Okay"
+
+[node name="CancelBtn" type="Button" parent="MainVbox/BtnHbox"]
+margin_left = 325.0
+margin_right = 400.0
+margin_bottom = 25.0
+rect_min_size = Vector2( 75, 25 )
+text = "Cancel"

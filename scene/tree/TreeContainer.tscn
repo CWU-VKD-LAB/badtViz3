@@ -1,0 +1,62 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://scene/tree/TreeContainer.cs" type="Script" id=1]
+
+[node name="TreeContainer" type="ScrollContainer"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+rect_min_size = Vector2( 75, 0 )
+size_flags_horizontal = 3
+size_flags_vertical = 3
+script = ExtResource( 1 )
+
+[node name="VSplitter" type="VSplitContainer" parent="."]
+margin_right = 1280.0
+margin_bottom = 720.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="TreeSelectVbox" type="VBoxContainer" parent="VSplitter"]
+margin_right = 1280.0
+margin_bottom = 354.0
+rect_min_size = Vector2( 0, 200 )
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="TreesLabel" type="Label" parent="VSplitter/TreeSelectVbox"]
+margin_right = 1280.0
+margin_bottom = 14.0
+text = "Trees:"
+
+[node name="TreesItemList" type="ItemList" parent="VSplitter/TreeSelectVbox"]
+margin_top = 18.0
+margin_right = 1280.0
+margin_bottom = 354.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="TreeEditVbox" type="VBoxContainer" parent="VSplitter"]
+margin_top = 366.0
+margin_right = 1280.0
+margin_bottom = 720.0
+rect_min_size = Vector2( 0, 200 )
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="HSeparator" type="HSeparator" parent="VSplitter/TreeEditVbox"]
+margin_right = 1280.0
+margin_bottom = 10.0
+rect_min_size = Vector2( 0, 10 )
+
+[node name="TreesLabel" type="Label" parent="VSplitter/TreeEditVbox"]
+margin_top = 14.0
+margin_right = 1280.0
+margin_bottom = 28.0
+text = "Selected Tree Nodes:"
+
+[node name="SelectedTree" type="Tree" parent="VSplitter/TreeEditVbox"]
+margin_top = 32.0
+margin_right = 1280.0
+margin_bottom = 354.0
+size_flags_horizontal = 3
+size_flags_vertical = 3

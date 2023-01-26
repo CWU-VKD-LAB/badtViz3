@@ -1,0 +1,60 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://scene/dataset/LoadDatasetWizard.cs" type="Script" id=1]
+[ext_resource path="res://scene/dataset/LoadTextFileDialog.tscn" type="PackedScene" id=2]
+
+[node name="LoadDatasetWizard" type="Node2D"]
+script = ExtResource( 1 )
+
+[node name="SourceSelectionDialog" type="WindowDialog" parent="."]
+margin_right = 325.0
+margin_bottom = 163.0
+popup_exclusive = true
+window_title = "Select Source"
+
+[node name="MainVbox" type="VBoxContainer" parent="SourceSelectionDialog"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 8.0
+margin_top = 8.0
+margin_right = -8.0
+margin_bottom = -8.0
+
+[node name="Label" type="Label" parent="SourceSelectionDialog/MainVbox"]
+margin_right = 309.0
+margin_bottom = 14.0
+text = "Select dataset source:"
+
+[node name="SourceTypeList" type="ItemList" parent="SourceSelectionDialog/MainVbox"]
+margin_top = 18.0
+margin_right = 309.0
+margin_bottom = 118.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+items = [ "Text file (csv, tsv, etc.)", null, false ]
+
+[node name="BtnHbox" type="HBoxContainer" parent="SourceSelectionDialog/MainVbox"]
+margin_top = 122.0
+margin_right = 309.0
+margin_bottom = 147.0
+
+[node name="CancelBtn" type="Button" parent="SourceSelectionDialog/MainVbox/BtnHbox"]
+margin_right = 75.0
+margin_bottom = 25.0
+rect_min_size = Vector2( 75, 25 )
+text = "Cancel"
+
+[node name="CenterPadding" type="Control" parent="SourceSelectionDialog/MainVbox/BtnHbox"]
+margin_left = 79.0
+margin_right = 230.0
+margin_bottom = 25.0
+size_flags_horizontal = 3
+
+[node name="NextBtn" type="Button" parent="SourceSelectionDialog/MainVbox/BtnHbox"]
+margin_left = 234.0
+margin_right = 309.0
+margin_bottom = 25.0
+rect_min_size = Vector2( 75, 25 )
+text = "Next"
+
+[node name="LoadTextFileDialog" parent="." instance=ExtResource( 2 )]
