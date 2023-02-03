@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Godot;
 
 public class ProjectViewportContainer : ViewportContainer
@@ -19,6 +20,7 @@ public class ProjectViewportContainer : ViewportContainer
 
         viewport = GetNode<ProjectViewport>("ProjectViewport");
         viewport.Connect("TreeNodeSpriteClicked", this, nameof(onTreeNodeSpriteClicked));
+        viewport.Connect("PredictedResultsChanged", this, nameof(onPredictedResultsChanged));
         viewportBackgroundColorRect = GetNode<ColorRect>("ProjectViewport/CanvasLayer/BackgroundColor");
 
         Connect("gui_input", this, nameof(onGuiInputEvent));
@@ -65,5 +67,10 @@ public class ProjectViewportContainer : ViewportContainer
         editNodeThresholdWindow.SetTrackedNodeAndDataset(tree, targetNode, dataset);
         editNodeThresholdWindow.SetProjectViewport(viewport);
         editNodeThresholdWindow.PopupCentered();
+    }
+
+    private void onPredictedResultsChanged(Godot.Collections.Array<PredictedResult> predictedResults)
+    {
+        mainUICanvas.UpdateStats(predictedResults);
     }
 }

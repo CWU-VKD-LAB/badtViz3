@@ -9,6 +9,7 @@ public class EditNodeThresholdWindow : WindowDialog
     private Label featureLabel = null;
     private LineEdit thresholdValueEdit = null;
     private Button closeBtn;
+    private Timer refreshViewportTimer;
 
     private ITreeClassifier trackedTree;
     private BinaryTreeNode trackedNode;
@@ -20,11 +21,17 @@ public class EditNodeThresholdWindow : WindowDialog
         minValueEdit = GetNode<LineEdit>("MainMargins/MainHbox/SliderHbox/MinValueInput");
         maxValueEdit = GetNode<LineEdit>("MainMargins/MainHbox/SliderHbox/MaxValueInput");
         thresholdSlider = GetNode<HSlider>("MainMargins/MainHbox/SliderHbox/HSlider");
-        thresholdSlider.Connect("drag_ended", this, nameof(onSliderDragEnded));
+        thresholdSlider.Connect("value_changed", this, nameof(onSliderValueChanged));
 
         featureLabel = GetNode<Label>("MainMargins/MainHbox/FeatureHbox/FeatureLabel");
         thresholdValueEdit = GetNode<LineEdit>("MainMargins/MainHbox/FeatureHbox/ThresholdValueEdit");
         closeBtn = GetNode<Button>("MainMargins/MainHbox/ButtonsHbox/CloseButton");
+        closeBtn.Connect("pressed", this, nameof(onCloseBtnPressed));
+        refreshViewportTimer = GetNode<Timer>("RefreshViewportTimer");
+        refreshViewportTimer.OneShot = true;
+        refreshViewportTimer.Connect("timeout", this, nameof(OnRefreshTimerTimeout));
+
+        this.Connect("popup_hide", this, nameof(onPopupHide));
         resetUI();
     }
 
@@ -49,14 +56,13 @@ public class EditNodeThresholdWindow : WindowDialog
         resetUI();
     }
 
-    private void onSliderDragEnded(bool valueChanged)
+    private void onSliderValueChanged(float _val)
     {
-        if (valueChanged)
+        trackedNode.FeatureThreshold = thresholdSlider.Value;
+        refreshThresholdText();
+        if (refreshViewportTimer.IsStopped())
         {
-            trackedNode.FeatureThreshold = thresholdSlider.Value;
-            refreshThresholdText();
-            projectViewport.DisplayTree(trackedTree);
-            return;
+            refreshViewportTimer.Start(0.25f);
         }
     }
 
@@ -118,5 +124,21 @@ public class EditNodeThresholdWindow : WindowDialog
         thresholdSlider.Value = thresholdValue;
 
         refreshThresholdText();
+    }
+
+    private void onCloseBtnPressed()
+    {
+        Visible = false;
+    }
+
+    private void OnRefreshTimerTimeout()
+    {
+        projectViewport.DisplayTree(trackedTree);
+    }
+
+    private void onPopupHide()
+    {
+        GetParent().RemoveChild(this);
+        QueueFree();
     }
 }

@@ -1,8 +1,9 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=5 format=2]
 
 [ext_resource path="res://scene/MainUICanvas.cs" type="Script" id=1]
 [ext_resource path="res://scene/dataset/DatasetContainer.tscn" type="PackedScene" id=2]
 [ext_resource path="res://scene/tree/TreeContainer.tscn" type="PackedScene" id=3]
+[ext_resource path="res://scene/ui/StatsHbox.tscn" type="PackedScene" id=4]
 
 [node name="MainUICanvas" type="CanvasLayer"]
 script = ExtResource( 1 )
@@ -130,10 +131,10 @@ margin_right = 1260.0
 margin_bottom = 10.0
 rect_min_size = Vector2( 0, 10 )
 
-[node name="TextEdit" type="TextEdit" parent="MainPanel/MainScrollContainer/MainPanelVbox/InfoSplitter/InfoVbox"]
+[node name="InfoScrollContainer" type="ScrollContainer" parent="MainPanel/MainScrollContainer/MainPanelVbox/InfoSplitter/InfoVbox"]
 margin_top = 14.0
 margin_right = 1260.0
 margin_bottom = 40.0
-size_flags_horizontal = 3
 size_flags_vertical = 3
-readonly = true
+
+[node name="StatsHbox" parent="MainPanel/MainScrollContainer/MainPanelVbox/InfoSplitter/InfoVbox/InfoScrollContainer" instance=ExtResource( 4 )]

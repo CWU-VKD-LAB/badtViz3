@@ -6,7 +6,7 @@ public class TreeNodeLine : Node2D
     private Vector2 destPos = new Vector2(0.0f, 0.0f);
     private Color color = Color.Color8(0, 0, 0, 255);
     private float lineThickness = 8.0f;
-    private bool drawRangeTicks = false;
+    private bool drawRangeTicks = true;
     private float rangeTicksPadding = 40.0f;
     private float rangeTickLength = 15.0f;
     private Vector2 startTickPos = Vector2.Zero;
@@ -25,6 +25,19 @@ public class TreeNodeLine : Node2D
         set
         {
             destPos = value;
+            updateRangePos();
+        }
+    }
+
+    public float TickPadding
+    {
+        get
+        {
+            return rangeTicksPadding;
+        }
+        set
+        {
+            rangeTicksPadding = value;
             updateRangePos();
         }
     }

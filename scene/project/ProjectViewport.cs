@@ -32,9 +32,16 @@ struct CreateNodeResult
     }
 }
 
+public class PredictedResult : Reference
+{
+    public List<Tuple<Sample, string>> SamplePredictions;
+    public Dataset SourceDataset;
+}
+
 public class ProjectViewport : Viewport
 {
     [Signal] public delegate void TreeNodeSpriteClicked(ITreeClassifier classifier, TreeNodeSprite sprite, Dataset dataset);
+    [Signal] public delegate void PredictedResultsChanged(Godot.Collections.Array<PredictedResult> predictedResults);
     private MainUICanvas mainUICanvas = null;
     private static PackedScene nodeSpriteScene = null;
     private static PackedScene sampleSplineScene = null;
@@ -48,11 +55,13 @@ public class ProjectViewport : Viewport
     private Vector2 nodePadding = new Vector2(200f, 100f);
 
     private List<Tuple<ITreeClassifier, TreeNodeSprite, Dataset>> currentNodeSprites = null;
+    private Godot.Collections.Array<PredictedResult> predictionResults = null;
 
     public override void _Ready()
     {
         mainUICanvas = GetTree().Root.GetNode<MainUICanvas>("MainUICanvas");
         currentNodeSprites = new List<Tuple<ITreeClassifier, TreeNodeSprite, Dataset>>();
+        predictionResults = new Godot.Collections.Array<PredictedResult>();
 
         if (nodeSpriteScene == null)
         {
@@ -71,7 +80,7 @@ public class ProjectViewport : Viewport
 
         contentRootNode = GetNode<Node2D>("ContentRoot");
         mainCamera = GetNode<Camera2D>("MainCamera");
-        mainCamera.Zoom = new Vector2(1.0f, 1.0f);
+        mainCamera.Zoom = new Vector2(4.0f, 4.0f);
 
         // SampleSpline testSpline = sampleSplineScene.Instance<SampleSpline>();
         // testSpline.Curve.AddPoint(new Vector2(0, 0));
@@ -174,6 +183,10 @@ public class ProjectViewport : Viewport
         try
         {
             clearTree();
+            if (tree == null)
+            {
+                return;
+            }
 
             ITreeNode rootNode = tree.GetTreeRoot();
             if (rootNode == null)
@@ -189,6 +202,8 @@ public class ProjectViewport : Viewport
 
             List<Dataset> datasets = mainUICanvas.ActiveProject.GetAllDatasets();
             float treeWidthSum = 0.0f;
+
+            predictionResults.Clear();
 
             foreach (Dataset d in datasets)
             {
@@ -213,6 +228,8 @@ public class ProjectViewport : Viewport
                     }
                 }
             }
+
+            EmitSignal("PredictedResultsChanged", predictionResults);
         }
         catch (Exception ex)
         {
@@ -298,21 +315,29 @@ public class ProjectViewport : Viewport
     {
         Vector2 startPointGlobal = root.ToGlobal(root.Position - new Vector2(0, 150f));
 
+        List<Tuple<Sample, string>> predictions = new List<Tuple<Sample, string>>();
+
         for (int i = 0; i < d.Count; i++)
         {
             Sample s = d[i];
             if (s.Visible)
             {
-                createSamplePredictionsRecursive(root, startPointGlobal, s).Smooth(true);
+                Tuple<SampleSpline, string> result = createSamplePredictionsRecursive(root, startPointGlobal, s);
+                result.Item1.Smooth(true);
+                predictions.Add(new Tuple<Sample, string>(s, result.Item2));
             }
         }
+        PredictedResult newResult = new PredictedResult();
+        newResult.SamplePredictions = predictions;
+        newResult.SourceDataset = d;
+        predictionResults.Add(newResult);
     }
 
-    private SampleSpline createSamplePredictionsRecursive(TreeNodeSprite sprite, Vector2 startPointGlobal, Sample s, SampleSpline newSpline = null)
+    private Tuple<SampleSpline, string> createSamplePredictionsRecursive(TreeNodeSprite sprite, Vector2 startPointGlobal, Sample s, SampleSpline newSpline = null)
     {
-        if (sprite == null || sprite.SourceNode.GetIsLeafClass())
+        if (sprite == null || sprite.SourceNode == null || sprite.SourceNode.GetIsLeafClass())
         {
-            return newSpline;
+            return new Tuple<SampleSpline, string>(newSpline, sprite != null ? sprite.SourceNode.GetLeafClass() : null);
         }
 
         if (newSpline == null)
@@ -322,22 +347,41 @@ public class ProjectViewport : Viewport
             sprite.AddChild(newSpline);
         }
 
+        ITreeNode sourceNode = sprite.SourceNode;
         Tuple<Vector2, int> result = createSampleSpline(sprite, startPointGlobal, s, newSpline);
-        if (result.Item2 == -1)
-        {
-            return newSpline;
-        }
+        Tuple<SampleSpline, string> childResult = null;
 
-        else if (result.Item2 == 0)
+        if (result.Item2 == 0)
         {
-            createSamplePredictionsRecursive(sprite.LeftChildSprite, result.Item1, s, newSpline);
+            ITreeNode leftChild = sourceNode.GetLeftmostChild();
+            if (leftChild != null && leftChild.GetIsLeafClass() && s.ParentDataset.Schema.HasTargetClassName(leftChild.GetLeafClass()))
+            {
+                childResult = new Tuple<SampleSpline, string>(newSpline, leftChild.GetLeafClass());
+            }
+            else
+            {
+                childResult = createSamplePredictionsRecursive(sprite.LeftChildSprite, result.Item1, s, newSpline);
+            }
+
+        }
+        else if (result.Item2 == 1)
+        {
+            ITreeNode rightChild = sourceNode.GetRightmostChild();
+            if (rightChild != null && rightChild.GetIsLeafClass() && s.ParentDataset.Schema.HasTargetClassName(rightChild.GetLeafClass()))
+            {
+                childResult = new Tuple<SampleSpline, string>(newSpline, rightChild.GetLeafClass());
+            }
+            else
+            {
+                childResult = createSamplePredictionsRecursive(sprite.RightChildSprite, result.Item1, s, newSpline);
+            }
         }
         else
         {
-            createSamplePredictionsRecursive(sprite.RightChildSprite, result.Item1, s, newSpline);
+            childResult = createSamplePredictionsRecursive(null, result.Item1, s, newSpline);
         }
 
-        return newSpline;
+        return childResult;
     }
 
     private Tuple<Vector2, int> createSampleSpline(TreeNodeSprite sprite, Vector2 startPointGlobal, Sample s, SampleSpline newSpline)
@@ -369,15 +413,8 @@ public class ProjectViewport : Viewport
         newSpline.Curve.AddPoint(newSpline.ToLocal(sprite.ToGlobal(middlePoint)));
         newSpline.Curve.AddPoint(newSpline.ToLocal(sprite.ToGlobal(terminatingPoint)));
 
-        bool isDeadEnd = true;
         ITreeNode terminatingChild = sprite.SourceNode.GetChildren()[terminatingPrediction];
-
-        if (terminatingChild != null && !terminatingChild.GetIsLeafClass())
-        {
-            isDeadEnd = false;
-        }
-
-        return new Tuple<Vector2, int>(sprite.ToGlobal(terminatingPoint), isDeadEnd ? -1 : terminatingPrediction);
+        return new Tuple<Vector2, int>(sprite.ToGlobal(terminatingPoint), terminatingPrediction);
     }
 
     private void predictSample(Sample s, TreeNodeSprite parent, List<TreeNodeSprite> path = null)

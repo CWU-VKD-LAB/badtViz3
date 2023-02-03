@@ -3,6 +3,7 @@ using Godot;
 
 public class TreeContainer : ScrollContainer
 {
+    [Signal] public delegate void TreeSelectionChanged(string selectedTreeName);
     private MainUICanvas mainUICanvas = null;
     private ItemList treesItemList = null;
     private Tree selectedTree = null;
@@ -76,6 +77,7 @@ public class TreeContainer : ScrollContainer
     private void onTreeItemSelected(int itemIndex)
     {
         refreshSelectedTree();
+        EmitSignal("TreeSelectionChanged", SelectedTreeName);
     }
 
     private void refreshTreesList()

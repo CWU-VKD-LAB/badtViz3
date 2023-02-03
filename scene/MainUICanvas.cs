@@ -29,6 +29,7 @@ public class MainUICanvas : CanvasLayer
     private TabContainer projectTabsContainer = null;
     private TreeContainer treeContainer = null;
     private DatasetContainer datasetContainer = null;
+    private StatsHbox statsInfoHbox = null;
     private FileDialog loadTreeFileDialog = null;
 
     private JSONTreeLoader jsonTreeLoader;
@@ -67,7 +68,10 @@ public class MainUICanvas : CanvasLayer
 
         projectTabsContainer = GetNode<TabContainer>("MainPanel/MainScrollContainer/MainPanelVbox/InfoSplitter/TreeSplitter/DatasetSplitter/ProjectTabsContainer");
         treeContainer = GetNode<TreeContainer>("MainPanel/MainScrollContainer/MainPanelVbox/InfoSplitter/TreeSplitter/TreeContainer");
+        treeContainer.Connect("TreeSelectionChanged", this, nameof(OnTreeContainerSelectionChanged));
         datasetContainer = GetNode<DatasetContainer>("MainPanel/MainScrollContainer/MainPanelVbox/InfoSplitter/TreeSplitter/DatasetSplitter/DatasetContainer");
+
+        statsInfoHbox = GetNode<StatsHbox>("MainPanel/MainScrollContainer/MainPanelVbox/InfoSplitter/InfoVbox/InfoScrollContainer/StatsHbox");
 
         treeSplitter.SplitOffset = -200;
         datasetSplitter.SplitOffset = 200;
@@ -121,6 +125,26 @@ public class MainUICanvas : CanvasLayer
 
             return ActiveProject.GetTree(selectedTree);
         }
+    }
+
+    public void RefreshViewport(bool ignoreErrors = false)
+    {
+        ActiveProjectContainer.RefreshViewport(ignoreErrors);
+    }
+
+    public void RefreshDatasetSamples()
+    {
+        datasetContainer.RefreshSamplesList();
+    }
+
+    public void UpdateStats(Godot.Collections.Array<PredictedResult> predictedResults)
+    {
+        statsInfoHbox.UpdateStats(predictedResults);
+    }
+
+    public void OnTreeContainerSelectionChanged(string treeName)
+    {
+        RefreshViewport();
     }
 
     public void ImportDatasetForCurrentProject(string path, DatasetLoaderOptions options)
@@ -276,6 +300,7 @@ public class MainUICanvas : CanvasLayer
                     return;
                 }
                 EmitSignal("ProjectTreeListChanged", ActiveProject);
+                ActiveProjectContainer.RefreshViewport(true);
             }
         }
         catch (Exception ex)
@@ -296,6 +321,7 @@ public class MainUICanvas : CanvasLayer
             ID3Classifier newTree = new ID3Classifier(treeName);
             ActiveProject.AddTree(newTree, true);
             EmitSignal("ProjectTreeListChanged", ActiveProject);
+            ActiveProjectContainer.RefreshViewport(true);
         }
         catch (Exception ex)
         {
@@ -313,6 +339,7 @@ public class MainUICanvas : CanvasLayer
                 ActiveProject.DatasetSchema.Validate(importedTree);
                 ActiveProject.AddTree(importedTree);
                 EmitSignal("ProjectTreeListChanged", ActiveProject);
+                ActiveProjectContainer.RefreshViewport(true);
             }
         }
         catch (Exception ex)
@@ -409,6 +436,7 @@ public class MainUICanvas : CanvasLayer
                 ITreeNode parentNode = selectedTreeNode.GetParentNode();
                 parentNode.RemoveChild(selectedTreeNode);
                 EmitSignal("ProjectTreeNodeChanged", ActiveProject, parentNode);
+                ActiveProjectContainer.RefreshViewport(true);
             }
         }
         catch (Exception ex)
@@ -461,6 +489,7 @@ public class MainUICanvas : CanvasLayer
 
                 EmitSignal("ProjectTreeNodeChanged", ActiveProject, currentTreeBase);
             }
+            ActiveProjectContainer.RefreshViewport(true);
         }
         catch (Exception ex)
         {
@@ -482,6 +511,7 @@ public class MainUICanvas : CanvasLayer
             {
                 newNode = new BinaryTreeNode(options.Name, options.LeafClass);
             }
+            ActiveProjectContainer.RefreshViewport(true);
         }
         else
         {
@@ -542,5 +572,6 @@ public class MainUICanvas : CanvasLayer
     {
         datasetContainer.RefreshDatasetList();
         datasetContainer.RefreshSamplesList();
+        ActiveProjectContainer.RefreshViewport(true);
     }
 }

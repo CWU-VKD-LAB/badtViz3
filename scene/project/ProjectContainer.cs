@@ -29,6 +29,23 @@ public class ProjectContainer : VBoxContainer
         this.project = project;
     }
 
+    public void RefreshViewport(bool suppressErrors = false)
+    {
+        ITreeClassifier selectedTree = mainUICanvas.ActiveTree;
+        if (!suppressErrors && selectedTree == null)
+        {
+            mainUICanvas.ShowMessageBox("Error", "You must select a tree before you can display it.");
+            return;
+        }
+        else if (!suppressErrors && !project.HasTree(selectedTree.GetName()))
+        {
+            mainUICanvas.ShowMessageBox("Error", "Selected tree is not valid for current project.");
+            return;
+        }
+
+        projectViewport.DisplayTree(selectedTree);
+    }
+
     private void onViewportBackgroundColorPickerChanged(Color newColor)
     {
         projectViewport.BackgroundColorRect.Color = newColor;
@@ -36,18 +53,6 @@ public class ProjectContainer : VBoxContainer
 
     private void onRefreshBtnPressed()
     {
-        ITreeClassifier selectedTree = mainUICanvas.ActiveTree;
-        if (selectedTree == null)
-        {
-            mainUICanvas.ShowMessageBox("Error", "You must select a tree before you can display it.");
-            return;
-        }
-        else if (!project.HasTree(selectedTree.GetName()))
-        {
-            mainUICanvas.ShowMessageBox("Error", "Selected tree is not valid for current project.");
-            return;
-        }
-
-        projectViewport.DisplayTree(selectedTree);
+        RefreshViewport();
     }
 }

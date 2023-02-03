@@ -159,6 +159,14 @@ public class TreeNodeSprite : Node2D
     {
         leftLineDest = new Vector2(-nodeSpacing.x, nodeSpacing.y) * 0.75f;
         rightLineDest = nodeSpacing * 0.75f;
+        if (leftLine != null)
+        {
+            leftLine.TickPadding = leftLineDest.Length() * sampleTickPading;
+        }
+        if (rightLine != null)
+        {
+            rightLine.TickPadding = rightLineDest.Length() * sampleTickPading;
+        }
     }
 
     public void UpdateLines()
