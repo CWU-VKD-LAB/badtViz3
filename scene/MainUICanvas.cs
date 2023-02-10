@@ -33,6 +33,7 @@ public class MainUICanvas : CanvasLayer
     private FileDialog loadTreeFileDialog = null;
 
     private JSONTreeLoader jsonTreeLoader;
+    private bool uiReady = false;
 
     public MainUICanvas()
     {
@@ -67,6 +68,7 @@ public class MainUICanvas : CanvasLayer
         datasetSplitter = GetNode<HSplitContainer>("MainPanel/MainScrollContainer/MainPanelVbox/InfoSplitter/TreeSplitter/DatasetSplitter");
 
         projectTabsContainer = GetNode<TabContainer>("MainPanel/MainScrollContainer/MainPanelVbox/InfoSplitter/TreeSplitter/DatasetSplitter/ProjectTabsContainer");
+        projectTabsContainer.Connect("tab_changed", this, nameof(onProjectTabChanged));
         treeContainer = GetNode<TreeContainer>("MainPanel/MainScrollContainer/MainPanelVbox/InfoSplitter/TreeSplitter/TreeContainer");
         treeContainer.Connect("TreeSelectionChanged", this, nameof(OnTreeContainerSelectionChanged));
         datasetContainer = GetNode<DatasetContainer>("MainPanel/MainScrollContainer/MainPanelVbox/InfoSplitter/TreeSplitter/DatasetSplitter/DatasetContainer");
@@ -75,7 +77,8 @@ public class MainUICanvas : CanvasLayer
 
         treeSplitter.SplitOffset = -200;
         datasetSplitter.SplitOffset = 200;
-        createDefaultProject();
+        createNewProject();
+        uiReady = true;
     }
 
     public Project ActiveProject
@@ -197,11 +200,30 @@ public class MainUICanvas : CanvasLayer
         return inputDialog;
     }
 
-    private void createDefaultProject()
+    private void onProjectTabChanged(int index)
+    {
+        if (!uiReady)
+        {
+            return;
+        }
+        try
+        {
+            datasetContainer.RefreshDatasetList();
+            datasetContainer.RefreshSamplesList();
+            EmitSignal("ProjectTreeListChanged", ActiveProject);
+            ActiveProjectContainer.RefreshViewport(true);
+        }
+        catch (Exception ex)
+        {
+            ShowMessageBox("Error", ex.GetType().ToString() + "\n\n" + ex.Message + "\n\n" + ex.StackTrace);
+        }
+    }
+
+    private void createNewProject(string name = "Default project")
     {
         try
         {
-            Project newProject = new Project("Default project", null, null);
+            Project newProject = new Project(name, null, null);
             addProject(newProject);
 
             ProjectContainer containerInstance = projectContainerScene.Instance<ProjectContainer>();
@@ -234,7 +256,24 @@ public class MainUICanvas : CanvasLayer
 
     private void onProjectMenuItemSelected(int itemIndex)
     {
+        try
+        {
+            if (itemIndex == 0)
+            {
+                SimpleStringInputDialog inputDialog = ShowSimpleStringInputDialog("Enter name for new project",
+                "Enter a unique name for the project:", "New Project");
+                inputDialog.Connect("StringInputAcceptedEvent", this, nameof(onNewProjectNameEntered));
+            }
+        }
+        catch (Exception ex)
+        {
+            ShowMessageBox("Error", ex.GetType().ToString() + "\n\n" + ex.Message + "\n\n" + ex.StackTrace);
+        }
+    }
 
+    private void onNewProjectNameEntered(string projectName)
+    {
+        createNewProject(projectName);
     }
 
     private void onTreeMenuItemSelected(int itemIndex)

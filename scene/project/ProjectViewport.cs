@@ -242,8 +242,10 @@ public class ProjectViewport : Viewport
         currentNodeSprites.Clear();
         foreach (Node child in contentRootNode.GetChildren())
         {
-            contentRootNode.CallDeferred("remove_child", child);
-            child.CallDeferred("queue_free");
+            contentRootNode.RemoveChild(child);
+            child.QueueFree();
+            // contentRootNode.CallDeferred("remove_child", child);
+            // child.CallDeferred("queue_free");
         }
     }
 
@@ -306,8 +308,8 @@ public class ProjectViewport : Viewport
             }
         }
 
-        float leftMostPos = Mathf.Min(Mathf.Min(leftChild.leftMostPos, rightChild.leftMostPos), newNodeSprite.GlobalPosition.x);
-        float rightMostPos = Mathf.Max(Mathf.Max(leftChild.rightMostPos, rightChild.rightMostPos), newNodeSprite.GlobalPosition.x);
+        float leftMostPos = Mathf.Min(Mathf.Min(leftChild.leftMostPos, rightChild.leftMostPos), newNodeSprite.Position.x);
+        float rightMostPos = Mathf.Max(Mathf.Max(leftChild.rightMostPos, rightChild.rightMostPos), newNodeSprite.Position.x);
 
         return new CreateNodeResult(newNodeSprite, 1 + childrenSum, leftMostPos, rightMostPos);
     }

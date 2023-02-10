@@ -37,6 +37,11 @@ public class DatasetContainer : ScrollContainer
         List<Dataset> datasets = mainUICanvas.ActiveProject.GetAllDatasets();
         clearDatasetsList();
 
+        if (datasets == null)
+        {
+            return;
+        }
+
         foreach (Dataset d in datasets)
         {
             DatasetListItem newListItem = datasetListItemScene.Instance<DatasetListItem>();
@@ -49,6 +54,11 @@ public class DatasetContainer : ScrollContainer
     {
         List<Dataset> datasets = mainUICanvas.ActiveProject.GetAllDatasets();
         clearSamplesList();
+
+        if (datasets == null)
+        {
+            return;
+        }
 
         foreach (Dataset d in datasets)
         {
