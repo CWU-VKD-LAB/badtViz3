@@ -295,7 +295,7 @@ public class DatasetColumn<T> : Reference, IDatasetColumn
         IComparable oldVal = (IComparable)minValue;
         IComparable newVal = (IComparable)val;
 
-        if (oldVal == null || oldVal.CompareTo(newVal) > 0)
+        if (values.Count <= 1 || oldVal == null || oldVal.CompareTo(newVal) > 0)
         {
             minValue = val;
         }
@@ -306,7 +306,7 @@ public class DatasetColumn<T> : Reference, IDatasetColumn
         IComparable oldVal = (IComparable)maxValue;
         IComparable newVal = (IComparable)val;
 
-        if (oldVal == null || oldVal.CompareTo(newVal) < 0)
+        if (values.Count <= 1 || oldVal == null || oldVal.CompareTo(newVal) < 0)
         {
             maxValue = val;
         }

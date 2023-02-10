@@ -224,7 +224,7 @@ public class ProjectViewport : Viewport
                         rootNodeSprite.Position =
                             new Vector2((treeWidthSum + Math.Abs(rootNodeSprite.GlobalPosition.x - createResult.leftMostPos)), rootNodeSprite.GlobalPosition.y);
 
-                        treeWidthSum += (treeWidth + (nodeSpriteSpacing.x * 2) + nodePadding.x);
+                        treeWidthSum += (treeWidth + (nodeSpriteSpacing.x) + nodePadding.x);
                     }
                 }
             }
@@ -256,6 +256,7 @@ public class ProjectViewport : Viewport
 
         TreeNodeSprite newNodeSprite = nodeSpriteScene.Instance<TreeNodeSprite>();
         newNodeSprite.SourceNode = node;
+        newNodeSprite.SourceDataset = targetDataset;
         newNodeSprite.NodeSpacing = nodeSpriteSpacing;
         newNodeSprite.ParentSprite = parent;
         currentNodeSprites.Add(new Tuple<ITreeClassifier, TreeNodeSprite, Dataset>(classifier, newNodeSprite, targetDataset));

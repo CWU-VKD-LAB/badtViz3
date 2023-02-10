@@ -69,9 +69,7 @@ public class EditDatasetSampleCell : MarginContainer
     {
         try
         {
-            object convertedValue = null;
-            // Feature.TryConvertType(feature.Type, newValue, out convertedValue);
-            // Value = convertedValue;
+            sample[featureIndex] = newValue;
         }
         catch (Exception e)
         {

@@ -159,6 +159,7 @@ public class Dataset : Reference
     {
         string[] targetClassNames = Schema.GetAllTargetClassNames();
         Array.Sort(targetClassNames);
+        Array.Reverse(targetClassNames);
 
         float startHue = 0.0f;
         float endHue = 1.0f;

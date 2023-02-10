@@ -4,6 +4,7 @@ using Godot;
 public class TreeNodeSprite : Node2D
 {
     private ITreeNode sourceNode = null;
+    private Dataset sourceDataset = null;
     private ColorRect nodeColorRect = null;
     private TreeNodeLine leftLine = null;
     private TreeNodeLine rightLine = null;
@@ -21,6 +22,7 @@ public class TreeNodeSprite : Node2D
     private string leftTargetClass = null;
     private string rightTargetClass = null;
     private float sampleTickPading = 0.2f;
+    private bool proportionalLines = true;
 
     public TreeNodeSprite()
     {
@@ -62,6 +64,18 @@ public class TreeNodeSprite : Node2D
             {
                 featureLabel.Text = ((BinaryTreeNode)sourceNode).FeatureName;
             }
+        }
+    }
+
+    public Dataset SourceDataset
+    {
+        get
+        {
+            return sourceDataset;
+        }
+        set
+        {
+            sourceDataset = value;
         }
     }
 
@@ -121,12 +135,12 @@ public class TreeNodeSprite : Node2D
 
     public Vector2 GetSamplePositionOnLine(int childIndex, Sample s)
     {
-        Vector2 startLeftLine = leftLineDest * sampleTickPading;
-        Vector2 endLeftLine = leftLineDest * (1.0f - sampleTickPading);
+        Vector2 startLeftLine = leftLineDest.LimitLength(leftLine.TickPadding);
+        Vector2 endLeftLine = leftLineDest.LimitLength(leftLineDest.Length() - (leftLine.TickPadding));
         Vector2 leftLinePadded = endLeftLine - startLeftLine;
 
-        Vector2 startRightLine = rightLineDest * sampleTickPading;
-        Vector2 endRightLine = rightLineDest * (1.0f - sampleTickPading);
+        Vector2 startRightLine = rightLineDest.LimitLength(rightLine.TickPadding);
+        Vector2 endRightLine = rightLineDest.LimitLength(rightLineDest.Length() - (rightLine.TickPadding));
         Vector2 rightLinePadded = endRightLine - startRightLine;
 
         if (childIndex == 0)
@@ -157,16 +171,37 @@ public class TreeNodeSprite : Node2D
 
     public void UpdateLineDestinations()
     {
-        leftLineDest = new Vector2(-nodeSpacing.x, nodeSpacing.y) * 0.75f;
-        rightLineDest = nodeSpacing * 0.75f;
+        Vector2 maxLeftLineDest = new Vector2(-nodeSpacing.x, nodeSpacing.y) * 0.75f;
+        Vector2 maxRightLineDest = nodeSpacing * 0.75f;
+        float leftTickPadding = maxLeftLineDest.Length() * sampleTickPading;
+        float rightTickPadding = maxRightLineDest.Length() * sampleTickPading;
+
         if (leftLine != null)
         {
-            leftLine.TickPadding = leftLineDest.Length() * sampleTickPading;
+            leftLine.TickPadding = maxLeftLineDest.Length() * sampleTickPading;
         }
         if (rightLine != null)
         {
-            rightLine.TickPadding = rightLineDest.Length() * sampleTickPading;
+            rightLine.TickPadding = maxRightLineDest.Length() * sampleTickPading;
         }
+
+        if (sourceNode != null && sourceDataset != null &&
+            proportionalLines && !sourceNode.GetIsLeafClass())
+        {
+            BinaryTreeNode binaryTreeNode = (BinaryTreeNode)sourceNode;
+            IDatasetColumn datasetColumn = sourceDataset.GetColumn(binaryTreeNode.FeatureName);
+            float rightLineRatio = (float)(((double)datasetColumn.GetMaxValue() - binaryTreeNode.FeatureThreshold) /
+                ((double)datasetColumn.GetMaxValue() - (double)datasetColumn.GetMinValue()));
+
+            rightLineRatio = Mathf.Clamp(rightLineRatio, 0.05f, 0.95f);
+            float leftLineRatio = 1.0f - rightLineRatio;
+
+            maxLeftLineDest = maxLeftLineDest.LimitLength(((maxLeftLineDest.Length() - (leftTickPadding * 2)) * leftLineRatio) + (leftTickPadding * 2));
+            maxRightLineDest = maxRightLineDest.LimitLength(((maxRightLineDest.Length() - (rightTickPadding * 2)) * rightLineRatio) + (rightTickPadding * 2));
+        }
+
+        leftLineDest = maxLeftLineDest;
+        rightLineDest = maxRightLineDest;
     }
 
     public void UpdateLines()

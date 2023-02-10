@@ -138,7 +138,7 @@ public class EditNodeThresholdWindow : WindowDialog
 
     private void onPopupHide()
     {
-        GetParent().RemoveChild(this);
-        QueueFree();
+        // GetParent().RemoveChild(this);
+        // QueueFree();
     }
 }
