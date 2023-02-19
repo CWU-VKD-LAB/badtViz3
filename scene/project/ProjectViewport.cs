@@ -46,6 +46,7 @@ public class ProjectViewport : Viewport
     private static PackedScene nodeSpriteScene = null;
     private static PackedScene sampleSplineScene = null;
     private static PackedScene viewportLabelScene = null;
+    private static PackedScene treeNodeColorRect = null;
     private Node2D contentRootNode = null;
     private Camera2D mainCamera = null;
     private Vector2 mousePos = new Vector2();
@@ -53,6 +54,10 @@ public class ProjectViewport : Viewport
     private Vector2 cameraPanningOrigin = new Vector2();
     private Vector2 nodeSpriteSpacing = new Vector2(400f, 400f);
     private Vector2 nodePadding = new Vector2(200f, 100f);
+    private Tuple<ITreeClassifier, TreeNodeSprite, Dataset> clickedSprite = null;
+    private float clickedSpriteHoldDuration = 0.0f;
+    private Vector2 clickedSpriteSourceMousePos = Vector2.Zero;
+    private ColorRect draggedColorRect = null;
 
     private List<Tuple<ITreeClassifier, TreeNodeSprite, Dataset>> currentNodeSprites = null;
     private Godot.Collections.Array<PredictedResult> predictionResults = null;
@@ -78,6 +83,18 @@ public class ProjectViewport : Viewport
             viewportLabelScene = GD.Load<PackedScene>("res://scene/ui/ViewportLabel.tscn");
         }
 
+        if (treeNodeColorRect == null)
+        {
+            treeNodeColorRect = GD.Load<PackedScene>("res://scene/tree/TreeNodeColorRect.tscn");
+        }
+
+        if (draggedColorRect == null)
+        {
+            draggedColorRect = treeNodeColorRect.Instance<ColorRect>();
+            AddChild(draggedColorRect);
+            draggedColorRect.Visible = false;
+        }
+
         contentRootNode = GetNode<Node2D>("ContentRoot");
         mainCamera = GetNode<Camera2D>("MainCamera");
         mainCamera.Zoom = new Vector2(4.0f, 4.0f);
@@ -98,6 +115,18 @@ public class ProjectViewport : Viewport
             mainCamera.Position += (cameraPanningOrigin - mousePos) * mainCamera.Zoom;
             cameraPanningOrigin = mousePos;
         }
+        else if (clickedSprite != null)
+        {
+            if (clickedSpriteHoldDuration <= 0.25 && clickedSprite.Item2.SourceNode.GetParentNode() != null)
+            {
+                clickedSpriteHoldDuration += delta;
+            }
+            else if (clickedSpriteHoldDuration > 0.25)
+            {
+                draggedColorRect.Visible = true;
+                draggedColorRect.SetPosition(getLocalMousePos() - (draggedColorRect.GetRect().Size / 2));
+            }
+        }
     }
 
     public Vector2 MousePos
@@ -114,22 +143,30 @@ public class ProjectViewport : Viewport
         get { return contentRootNode; }
     }
 
+    private Vector2 getLocalMousePos()
+    {
+        return mainCamera.Position + ((mousePos - (Size / 2)) * mainCamera.Zoom);
+    }
+
     public void onGuiInputEvent(InputEvent ev)
     {
-        Vector2 localMousePos = mainCamera.Position + ((mousePos - (Size / 2)) * mainCamera.Zoom);
+        Vector2 localMousePos = getLocalMousePos();
 
         if (ev.GetType() == typeof(InputEventMouseButton))
         {
             InputEventMouseButton mouseButtonEvent = (InputEventMouseButton)ev;
             if (mouseButtonEvent.IsActionPressed("viewport_primary") && cameraIsPanning == false)
             {
-                Tuple<ITreeClassifier, TreeNodeSprite, Dataset> spriteUnderMouse = getNodeAtPos(localMousePos);
-                if (spriteUnderMouse != null)
+                var spriteUnderMouse = getNodeAtPos(localMousePos);
+
+                if (clickedSprite == null && spriteUnderMouse != null)
                 {
+                    clickedSprite = spriteUnderMouse;
                     cameraIsPanning = false;
-                    EmitSignal("TreeNodeSpriteClicked", spriteUnderMouse.Item1, spriteUnderMouse.Item2, spriteUnderMouse.Item3);
+                    clickedSpriteHoldDuration = 0.0f;
+                    clickedSpriteSourceMousePos = localMousePos;
                 }
-                else
+                else if (clickedSprite == null && spriteUnderMouse == null)
                 {
                     cameraPanningOrigin = mousePos;
                     cameraIsPanning = true;
@@ -138,6 +175,27 @@ public class ProjectViewport : Viewport
             else if (mouseButtonEvent.IsActionReleased("viewport_primary") && cameraIsPanning == true)
             {
                 cameraIsPanning = false;
+
+            }
+            else if (mouseButtonEvent.IsActionReleased("viewport_primary") && cameraIsPanning == false)
+            {
+                var spriteUnderMouse = getNodeAtPos(localMousePos);
+                if (clickedSprite != null && spriteUnderMouse != null && spriteUnderMouse.Item2 == clickedSprite.Item2 && clickedSpriteHoldDuration < 0.25f)
+                {
+                    EmitSignal("TreeNodeSpriteClicked", clickedSprite.Item1, clickedSprite.Item2, clickedSprite.Item3);
+                }
+                else if (clickedSprite != null && draggedColorRect.Visible)
+                {
+                    BinaryTreeNode btreeNode = (BinaryTreeNode)clickedSprite.Item2.SourceNode;
+                    clickedSprite.Item2.GlobalPosition = localMousePos;
+                    btreeNode.CustomDisplayPosition = clickedSprite.Item2.Position;
+                    btreeNode.UseCustomDisplayPosition = true;
+                    DisplayTree(clickedSprite.Item1);
+                }
+                clickedSprite = null;
+                cameraIsPanning = false;
+                clickedSpriteHoldDuration = 0.0f;
+                draggedColorRect.Visible = false;
             }
 
             if (mouseButtonEvent.ButtonIndex == (int)ButtonList.WheelUp)
@@ -308,8 +366,18 @@ public class ProjectViewport : Viewport
             }
         }
 
-        float leftMostPos = Mathf.Min(Mathf.Min(leftChild.leftMostPos, rightChild.leftMostPos), newNodeSprite.Position.x);
-        float rightMostPos = Mathf.Max(Mathf.Max(leftChild.rightMostPos, rightChild.rightMostPos), newNodeSprite.Position.x);
+        BinaryTreeNode sourceBTreeNode = (BinaryTreeNode)node;
+        if (sourceBTreeNode.UseCustomDisplayPosition)
+        {
+            newNodeSprite.Position = sourceBTreeNode.CustomDisplayPosition;
+        }
+        else
+        {
+            sourceBTreeNode.CustomDisplayPosition = newNodeSprite.Position;
+        }
+
+        float leftMostPos = Mathf.Min(Mathf.Min(leftChild.leftMostPos, rightChild.leftMostPos), newNodeSprite.GlobalPosition.x);
+        float rightMostPos = Mathf.Max(Mathf.Max(leftChild.rightMostPos, rightChild.rightMostPos), newNodeSprite.GlobalPosition.x);
 
         return new CreateNodeResult(newNodeSprite, 1 + childrenSum, leftMostPos, rightMostPos);
     }

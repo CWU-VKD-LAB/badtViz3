@@ -19,6 +19,8 @@ public class BinaryTreeNode : ITreeNode
     private double featureThreshold = 0.0;
     private ThresholdOperator featureThresholdOperator = ThresholdOperator.LessThan;
     private string leafClass = null;
+    bool useCustomDisplayPos = false;
+    private Vector2 customDisplayPos = Vector2.Zero;
 
     public BinaryTreeNode(string name)
     {
@@ -50,6 +52,18 @@ public class BinaryTreeNode : ITreeNode
     public override void SetName(string newName)
     {
         name = newName;
+    }
+
+    public bool UseCustomDisplayPosition
+    {
+        get => useCustomDisplayPos;
+        set => useCustomDisplayPos = value;
+    }
+
+    public Vector2 CustomDisplayPosition
+    {
+        get => customDisplayPos;
+        set => customDisplayPos = value;
     }
 
     public override ITreeNode GetParentNode()

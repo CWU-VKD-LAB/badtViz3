@@ -1,0 +1,10 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://shader/TreeNodeCircle.tres" type="Material" id=1]
+
+[node name="TreeNodeColorRect" type="ColorRect"]
+material = ExtResource( 1 )
+margin_left = -32.0
+margin_top = -32.0
+margin_right = 32.0
+margin_bottom = 32.0
